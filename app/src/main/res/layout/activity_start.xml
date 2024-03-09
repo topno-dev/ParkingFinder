@@ -35,7 +35,7 @@
         app:layout_constraintVertical_bias="0.705" />
 
     <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/button"
+        android:id="@+id/nextButton"
         android:layout_width="150dp"
         android:layout_height="57dp"
         android:background="@drawable/blue_button_gradient"

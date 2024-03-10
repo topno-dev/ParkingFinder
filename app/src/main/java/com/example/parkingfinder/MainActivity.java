@@ -7,8 +7,17 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+
+import com.example.parkingfinder.Fragment.home;
+import com.example.parkingfinder.Fragment.profile;
+import com.example.parkingfinder.databinding.ActivityMainBinding;
 
 public class MainActivity extends AppCompatActivity {
+
+    ActivityMainBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,6 +30,31 @@ public class MainActivity extends AppCompatActivity {
             return insets;
         });
 
+        binding = ActivityMainBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
+
+        replaceFragment(new home());
+
+        binding.bottomNavigationView.setOnItemSelectedListener(item -> {
+            if (item.getItemId() == R.id.homeFragment) {
+                replaceFragment(new home());
+            } else if (item.getItemId() == R.id.profileFragment) {
+                replaceFragment(new profile());
+            } else if (item.getItemId() == R.id.logoutClicked) {
+                System.out.println("Logout");
+            }
+            return true;
+        });
+
+
+    }
+
+    private void replaceFragment(Fragment fragment){
+
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.frame_layout, fragment);
+        fragmentTransaction.commit();
 
     }
 }

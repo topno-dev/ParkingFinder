@@ -22,7 +22,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="700dp"
-        android:layout_below="@id/textView6"
+        android:layout_below="@id/textView9"
         >
 
         <TextView
@@ -49,25 +49,14 @@
             app:layout_constraintStart_toEndOf="@+id/textView7"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:id="@+id/textView9"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="104dp"
-            android:text="Previous Parking"
-            app:layout_constraintBottom_toTopOf="@+id/recyclerView2"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.052"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerView2"
-            android:layout_width="match_parent"
-            android:layout_height="184dp"
-            tools:layout_editor_absoluteX="2dp"
-            tools:layout_editor_absoluteY="148dp"
+            android:layout_width="411dp"
+            android:layout_height="289dp"
             android:scrollbars="horizontal"
+            tools:layout_editor_absoluteX="0dp"
+            tools:layout_editor_absoluteY="41dp"
+
 
             />
 
@@ -80,6 +69,19 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/recyclerView2" />
+
+
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <TextView
+        android:id="@+id/textView9"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Parking History"
+        android:layout_below="@id/textView6"
+        android:paddingTop="15dp"
+        android:paddingStart="15dp"
+        tools:layout_editor_absoluteX="12dp"
+        tools:layout_editor_absoluteY="10dp" />
 
 </RelativeLayout>

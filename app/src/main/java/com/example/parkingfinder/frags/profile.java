@@ -27,7 +27,7 @@ import com.example.parkingfinder.R;
 import java.util.ArrayList;
 import java.util.List;
 
-public class profile extends Fragment {
+public class profile extends Fragment implements RecyclerViewInterface {
 
     DatabaseHelper dbHelper;
 
@@ -67,6 +67,16 @@ public class profile extends Fragment {
 
         }
 
+        // For parking history
+        if (username != null) {
+            dbHelper = new DatabaseHelper(requireContext(), null, null, 1);
+            List<parking_list> items = dbHelper.getParkingHistory(username);
+            if (!items.isEmpty()){
+                updateRecyclerViewHistory(view, items);
+            }
+
+        }
+
         TextView addCarTextView;
         addCarTextView = view.findViewById(R.id.textView8);
         addCarTextView.setOnClickListener(new View.OnClickListener() {
@@ -80,9 +90,17 @@ public class profile extends Fragment {
     }
 
     private void updateRecyclerView(View view, List<vehicle>items){
+
         RecyclerView recyclerView = view.findViewById(R.id.recyclerView3);
         recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext(),LinearLayoutManager.HORIZONTAL,false));
         recyclerView.setAdapter(new vehicle_adapterclass(getContext(),items));
+    }
+
+    private void updateRecyclerViewHistory(View view, List<parking_list>items){
+
+        RecyclerView recyclerView = view.findViewById(R.id.recyclerView2);
+        recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
+        recyclerView.setAdapter(new parking_adapterclass(getContext(),items, this));
     }
 
     private void showAddCarPopup(String username,View view) {
@@ -106,6 +124,7 @@ public class profile extends Fragment {
                     Toast.makeText(requireContext(), "Added Vehicle",Toast.LENGTH_SHORT).show();
                     List<vehicle> items = dbHelper.selectVehiclesByUsername(username);
                     updateRecyclerView(view,items);
+                    addCarDialog.dismiss();
                 } else {
                     Toast.makeText(requireContext(),"Vehicle number already added",Toast.LENGTH_SHORT).show();
                 }
@@ -115,4 +134,8 @@ public class profile extends Fragment {
         addCarDialog.show();
     }
 
+    @Override
+    public void onItemClick(int position) {
+        Toast.makeText(requireContext(),"Parking Info",Toast.LENGTH_SHORT).show();
+    }
 }

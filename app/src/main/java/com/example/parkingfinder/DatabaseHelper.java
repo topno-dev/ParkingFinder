@@ -196,28 +196,28 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return result != -1; // Returns true if insertion was successful, false otherwise
     }
 
-    public boolean createPaymentHistory(String username, String vehicle_number, int auto_id, int time_spent) {
+    public boolean createPaymentHistory(String username, String vehicle_number, int auto_id, String startTime, String endTime, String date) {
         // Get the rate from SharedPreferences
         SharedPreferencesManager sharedPreferencesManager = SharedPreferencesManager.getInstance(mContext);
         double rate = sharedPreferencesManager.getParkingRate();
 
-        // Calculate the total payment based on time_spent and rate
-        double total_payment = time_spent * rate;
 
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put("username", username);
         values.put("vehicle_number", vehicle_number);
         values.put("auto_id", auto_id);
-        values.put("time_spent", time_spent);
+        values.put("startTime", startTime);
+        values.put("endTime", endTime);
+        values.put("date", date);
         values.put("rate", rate);
-        values.put("total_payment", total_payment);
 
         long result = db.insert("PaymentHistory", null, values);
         db.close();
 
         return result != -1; // Returns true if insertion was successful, false otherwise
     }
+
 
     public boolean deleteUser(String username) {
         SQLiteDatabase db = this.getWritableDatabase();
@@ -276,6 +276,33 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         return vehicles;
     }
+
+    public List<parking_list> getParkingHistory(String username) {
+        List<parking_list> items = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor c = db.rawQuery("SELECT auto_id FROM PaymentHistory WHERE username = ?", new String[]{username});
+        while (c.moveToNext()) {
+            int auto_id = c.getInt(c.getColumnIndex("auto_id"));
+            Cursor parkingCursor = db.rawQuery("SELECT * FROM parking WHERE auto_id = ?", new String[]{String.valueOf(auto_id)});
+            if (parkingCursor.moveToFirst()) {
+                String category = parkingCursor.getString(parkingCursor.getColumnIndex("category"));
+                String address = parkingCursor.getString(parkingCursor.getColumnIndex("address"));
+                int space_avail = parkingCursor.getInt(parkingCursor.getColumnIndex("space_avail"));
+                String phone = parkingCursor.getString(parkingCursor.getColumnIndex("phone"));
+                double lat = parkingCursor.getDouble(parkingCursor.getColumnIndex("lat"));
+                double longi = parkingCursor.getDouble(parkingCursor.getColumnIndex("long"));
+                String url = parkingCursor.getString(parkingCursor.getColumnIndex("url"));
+                items.add(new parking_list(category, address, space_avail, phone, R.drawable.logo, auto_id, lat, longi, url));
+            }
+            parkingCursor.close();
+        }
+        c.close();
+        db.close();
+        return items;
+    }
+
+
+
 
 
 

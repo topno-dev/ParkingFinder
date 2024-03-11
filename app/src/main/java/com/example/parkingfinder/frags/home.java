@@ -2,9 +2,11 @@ package com.example.parkingfinder.frags;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.LocationManager;
 import android.location.LocationRequest;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -32,12 +34,13 @@ import com.google.android.gms.location.LocationServices;
 import java.util.ArrayList;
 import java.util.List;
 
-public class home extends Fragment {
+public class home extends Fragment implements RecyclerViewInterface{
 
     TextView textView;
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 123;
     private FusedLocationProviderClient fusedLocationClient;
     private DatabaseHelper dbHelper;
+    List<parking_list> res;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -66,7 +69,7 @@ public class home extends Fragment {
                 if (ContextCompat.checkSelfPermission(requireActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED){
                     ActivityCompat.requestPermissions(requireActivity(),new String[]{Manifest.permission.ACCESS_FINE_LOCATION},LOCATION_PERMISSION_REQUEST_CODE);
                 } else {
-                    getLocation();
+                    getLocation(view);
                 }
             }
         });
@@ -74,20 +77,26 @@ public class home extends Fragment {
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(view.getContext());
 
 
+//        RecyclerView recyclerView = view.findViewById(R.id.recyclerView);
+//
+//        List<parking_list> items = new ArrayList<parking_list>();
+//        items.add(new parking_list("Cat1","address",50,"+911234567890",R.drawable.logo));
+//        items.add(new parking_list("Cat2","address",50,"+911234567890",R.drawable.logo));
+//
+//        recyclerView.setLayoutManager(new LinearLayoutManager(recyclerView.getContext()));
+//        recyclerView.setAdapter(new parking_adapterclass(getContext(),items));
+
+    }
+
+    private void updateRecyclerView(View view, List<parking_list>items){
         RecyclerView recyclerView = view.findViewById(R.id.recyclerView);
-
-        List<parking_list> items = new ArrayList<parking_list>();
-        items.add(new parking_list("Cat1","address",50,"+911234567890",R.drawable.logo));
-        items.add(new parking_list("Cat2","address",50,"+911234567890",R.drawable.logo));
-
         recyclerView.setLayoutManager(new LinearLayoutManager(recyclerView.getContext()));
-        recyclerView.setAdapter(new parking_adapterclass(getContext(),items));
-
+        recyclerView.setAdapter(new parking_adapterclass(getContext(),items,this));
     }
 
 
 
-    public void getLocation() {
+    public void getLocation(View view) {
         fusedLocationClient.getCurrentLocation(LocationRequest.QUALITY_HIGH_ACCURACY, null /* callback for location updates */)
                 .addOnSuccessListener(requireActivity(), location -> {
                     // Got location!
@@ -96,11 +105,25 @@ public class home extends Fragment {
                         double longitude = location.getLongitude();
 
                         dbHelper.loadHandler();
-                        String res = dbHelper.getNearbyParking(latitude, longitude);
-                        Log.w("After ", res);
+                        res = dbHelper.getNearbyParking(latitude, longitude);
+                        updateRecyclerView(view, res);
+
+//                        Log.w("After ", res);
 
                     }
                 });
+    }
+
+    @Override
+    public void onItemClick(int position) {
+        double lati = res.get(position).getLatitude();
+        double longi = res.get(position).getLongitude();
+        String location = String.valueOf(lati)+","+String.valueOf(longi);
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.setData(Uri.parse("google.navigation:q="+location+"&mode=d"));
+        intent.setPackage("com.google.android.apps.maps");
+        startActivity(intent);
+//        Log.w(String.valueOf(position), url);
     }
 
 //    private void getLocation(){

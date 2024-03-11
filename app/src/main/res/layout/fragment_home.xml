@@ -4,7 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".frags.home">
+    tools:context=".frags.home"
+    android:background="#F7F7FA"
+    >
 
     <TextView
         android:id="@+id/textView3"
@@ -31,8 +33,9 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView6"
-        app:layout_constraintVertical_bias="0.071" />
+        app:layout_constraintVertical_bias="0.071"
+        android:padding="10dp"
+        />
 
     <TextView
         android:layout_centerVertical="true"
@@ -41,7 +44,7 @@
         android:layout_height="55dp"
         android:layout_below="@id/textView3"
         android:layout_marginTop="39dp"
-        android:background="@drawable/blue_button_gradient"
+        android:background="@drawable/orange_button_gradient"
         android:shadowColor="#000000"
         android:text="\nSearch for parking spots"
         android:textAlignment="center"

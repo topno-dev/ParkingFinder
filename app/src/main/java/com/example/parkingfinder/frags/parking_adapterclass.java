@@ -15,16 +15,19 @@ public class parking_adapterclass extends RecyclerView.Adapter<parking_viewholde
 
     Context context;
     List<parking_list> items;
+    private final RecyclerViewInterface recyclerViewInterface;
 
-    public parking_adapterclass(Context context, List<parking_list> items) {
+
+    public parking_adapterclass(Context context, List<parking_list> items, RecyclerViewInterface recyclerViewInterface) {
         this.context = context;
         this.items = items;
+        this.recyclerViewInterface = recyclerViewInterface;
     }
 
     @NonNull
     @Override
     public parking_viewholder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new parking_viewholder(LayoutInflater.from(context).inflate(R.layout.item_view_layout,parent,false));
+        return new parking_viewholder(LayoutInflater.from(context).inflate(R.layout.item_view_layout,parent,false), recyclerViewInterface);
     }
 
     @Override

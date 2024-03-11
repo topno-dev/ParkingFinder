@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
@@ -25,58 +25,50 @@
         android:id="@+id/editTextNewRate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="38dp"
-        android:layout_marginTop="81dp"
-        android:layout_marginEnd="163dp"
-        android:layout_marginBottom="669dp"
         android:ems="10"
         android:hint="Enter New Parking Rate"
         android:inputType="text"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView3" />
+        android:layout_below="@id/textView3"
+        android:layout_marginTop="50dp"
+        android:layout_marginLeft="30dp"
+        />
 
     <Button
         android:id="@+id/buttonChangeRate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="44dp"
-        android:layout_marginTop="76dp"
+        android:layout_marginTop="50dp"
         android:layout_marginEnd="29dp"
         android:layout_marginBottom="671dp"
         android:text="Change Rate"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/editTextNewRate"
-        app:layout_constraintTop_toBottomOf="@+id/textView3" />
+        android:layout_below="@id/textView3"
+        android:layout_toRightOf="@id/editTextNewRate"
+        />
 
     <Button
         android:id="@+id/button5"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Delete User"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.944"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/buttonChangeRate"
-        app:layout_constraintVertical_bias="0.089" />
+        android:layout_marginStart="44dp"
+        android:layout_toRightOf="@id/editTextText4"
+        android:layout_marginTop="57dp"
+        android:layout_below="@id/editTextNewRate"
+         />
 
     <EditText
         android:id="@+id/editTextText4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="57dp"
+        android:layout_marginLeft="30dp"
         android:layout_marginBottom="567dp"
         android:ems="10"
         android:hint="Enter Username"
         android:inputType="text"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.189"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextNewRate"
-        app:layout_constraintVertical_bias="0.0" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        android:layout_below="@id/editTextNewRate"
+         />
+
+</RelativeLayout>

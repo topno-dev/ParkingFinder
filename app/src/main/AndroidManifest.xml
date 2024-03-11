@@ -17,6 +17,12 @@
         android:theme="@style/Theme.ParkingFinder"
         tools:targetApi="31">
         <activity
+            android:name=".popup_window_addCar"
+            android:exported="false" />
+        <activity
+            android:name=".HorizontalScrollView"
+            android:exported="false" />
+        <activity
             android:name=".admin"
             android:exported="false" />
         <activity

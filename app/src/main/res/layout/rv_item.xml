@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/card"
+    android:layout_width="250dp"
+    android:layout_height="96dp"
+    android:layout_margin="10dp"
+    app:cardBackgroundColor="@color/white"
+    app:cardCornerRadius="5dp"
+
+    >
+    <RelativeLayout
+        android:layout_margin="5dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/vehImageView"
+            android:layout_width="48dp"
+            android:layout_height="48dp" />
+
+        <TextView
+            android:layout_marginStart="5dp"
+            android:layout_width="match_parent"
+            android:layout_toEndOf="@id/vehImageView"
+            android:layout_height="wrap_content"
+            android:id="@+id/vehName"
+            android:text="Vehicle Name"
+            />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/vehImageView"
+            android:text="Vehicle Number"
+            android:gravity="center"
+            android:id="@+id/vehNumberView"
+            />
+
+    </RelativeLayout>
+
+</androidx.cardview.widget.CardView>

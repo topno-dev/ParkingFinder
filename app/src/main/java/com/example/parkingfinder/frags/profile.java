@@ -1,21 +1,37 @@
 package com.example.parkingfinder.frags;
 
+import static android.content.Context.MODE_PRIVATE;
+
+import android.app.Dialog;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
 
+import com.example.parkingfinder.DatabaseHelper;
 import com.example.parkingfinder.R;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link profile#newInstance} factory method to
- * create an instance of this fragment.
- */
+import java.util.ArrayList;
+import java.util.List;
+
 public class profile extends Fragment {
+
+    DatabaseHelper dbHelper;
+
+    Dialog addCarDialog;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -27,5 +43,76 @@ public class profile extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_profile, container, false);
+
+
     }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        SharedPreferences sharedPreferences = requireContext().getSharedPreferences("loginPrefs", MODE_PRIVATE);
+        String username = sharedPreferences.getString("username", null);
+        addCarDialog = new Dialog(requireContext());
+
+        if (username != null) {
+            dbHelper = new DatabaseHelper(requireContext(), null, null, 1);
+            List<vehicle> items = dbHelper.selectVehiclesByUsername(username);
+            if (!items.isEmpty()){
+                updateRecyclerView(view, items);
+            } else {
+                items.add(new vehicle("No Vehicle"," ",R.drawable.baseline_directions_car_24));
+                updateRecyclerView(view, items);
+            }
+
+        }
+
+        TextView addCarTextView;
+        addCarTextView = view.findViewById(R.id.textView8);
+        addCarTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showAddCarPopup(username, view);
+            }
+        });
+
+
+    }
+
+    private void updateRecyclerView(View view, List<vehicle>items){
+        RecyclerView recyclerView = view.findViewById(R.id.recyclerView3);
+        recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext(),LinearLayoutManager.HORIZONTAL,false));
+        recyclerView.setAdapter(new vehicle_adapterclass(getContext(),items));
+    }
+
+    private void showAddCarPopup(String username,View view) {
+        addCarDialog.setContentView(R.layout.activity_popup_window_add_car);
+
+        Button button;
+        button = addCarDialog.findViewById(R.id.addCarButton);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.w("Buton Clucked", "Click");
+                EditText vehicle_name;
+                EditText vehicle_number;
+                vehicle_name = addCarDialog.findViewById(R.id.addVehicleNameEditText);
+                vehicle_number = addCarDialog.findViewById(R.id.addVehicleNumEditText);
+
+                String vehicleName = vehicle_name.getText().toString();
+                String vehicleNumber = vehicle_number.getText().toString();
+                boolean result = dbHelper.createVehicle(username,vehicleName,vehicleNumber);
+                if (result){
+                    Toast.makeText(requireContext(), "Added Vehicle",Toast.LENGTH_SHORT).show();
+                    List<vehicle> items = dbHelper.selectVehiclesByUsername(username);
+                    updateRecyclerView(view,items);
+                } else {
+                    Toast.makeText(requireContext(),"Vehicle number already added",Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+        addCarDialog.show();
+    }
+
 }

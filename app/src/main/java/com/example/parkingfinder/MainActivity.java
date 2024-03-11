@@ -1,5 +1,7 @@
 package com.example.parkingfinder;
 
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.Manifest;
@@ -48,7 +50,13 @@ public class MainActivity extends AppCompatActivity {
             } else if (item.getItemId() == R.id.profileFragment) {
                 replaceFragment(new profile());
             } else if (item.getItemId() == R.id.logoutClicked) {
-                System.out.println("Logout");
+                SharedPreferences sharedPreferences = getSharedPreferences("loginPrefs", MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.clear();
+                editor.apply();
+                Intent intent = new Intent(this,login_activity.class);
+                startActivity(intent);
+                finish();
             }
             return true;
         });

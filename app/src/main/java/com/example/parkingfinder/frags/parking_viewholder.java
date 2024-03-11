@@ -33,4 +33,9 @@ public class parking_viewholder extends RecyclerView.ViewHolder {
             }
         });
     }
+
+    private void setAnimation(View viewToAnimate, int position){
+
+    }
+
 }

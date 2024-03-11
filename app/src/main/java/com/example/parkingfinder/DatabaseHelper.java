@@ -3,6 +3,8 @@ package com.example.parkingfinder;
 import static android.content.ContentValues.TAG;
 
 import com.example.parkingfinder.frags.parking_list;
+
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
@@ -128,7 +130,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public List<parking_list> getNearbyParking(double latitude, double longitude){
         List<parking_list> items = new ArrayList<parking_list>();
         SQLiteDatabase db = this.getReadableDatabase();
-        Log.w("Query","SELECT * from parking WHERE lat BETWEEN "+latitude+" -0.01 AND "+latitude+"+0.01 AND long BETWEEN "+longitude+" -0.01 AND "+longitude+" +0.01;");
+//        Log.w("Query","SELECT * from parking WHERE lat BETWEEN "+latitude+" -0.01 AND "+latitude+"+0.01 AND long BETWEEN "+longitude+" -0.01 AND "+longitude+" +0.01;");
 //        Cursor c = db.rawQuery("SELECT * from parking WHERE lat BETWEEN "+latitude+" -0.01 AND "+latitude+"+0.01 AND long BETWEEN "+longitude+" -0.01 AND "+longitude+" +0.01;" ,null);
 //        Example query because of the default location being USA.
         Cursor c = db.rawQuery("SELECT * FROM parking WHERE lat BETWEEN 18.5131587397036 - 0.01 AND 18.5131587397036 + 0.01 AND long BETWEEN 73.92643376963856 - 0.01 AND 73.92643376963856 + 0.01;",null);
@@ -150,6 +152,94 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         return items;
     }
+
+    public boolean createUser(String username, String email, String password) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("username", username);
+        values.put("email", email);
+        values.put("password", password);
+        values.put("user_type", "user");
+
+        long result = db.insert("User", null, values);
+        db.close();
+
+        return result != -1; // Returns true if insertion was successful, false otherwise
+    }
+
+    public boolean verifyUser(String username, String password) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.query("User",
+                new String[]{"username"},
+                "username = ? AND password = ?",
+                new String[]{username, password},
+                null, null, null);
+
+        int count = cursor.getCount();
+        cursor.close();
+        db.close();
+
+        return count > 0;
+    }
+
+    public boolean createVehicle(String username, String vehicle_name, String vehicle_number) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("username", username);
+        values.put("vehicle_name", vehicle_name);
+        values.put("vehicle_number", vehicle_number);
+
+        long result = db.insert("Vehicle", null, values);
+        db.close();
+
+        return result != -1; // Returns true if insertion was successful, false otherwise
+    }
+
+    public boolean createPaymentHistory(String username, String vehicle_number, int auto_id, int time_spent) {
+        // Get the rate from SharedPreferences
+        SharedPreferencesManager sharedPreferencesManager = SharedPreferencesManager.getInstance(mContext);
+        double rate = sharedPreferencesManager.getParkingRate();
+
+        // Calculate the total payment based on time_spent and rate
+        double total_payment = time_spent * rate;
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("username", username);
+        values.put("vehicle_number", vehicle_number);
+        values.put("auto_id", auto_id);
+        values.put("time_spent", time_spent);
+        values.put("rate", rate);
+        values.put("total_payment", total_payment);
+
+        long result = db.insert("PaymentHistory", null, values);
+        db.close();
+
+        return result != -1; // Returns true if insertion was successful, false otherwise
+    }
+
+    public boolean deleteUser(String username) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        // Define the WHERE clause
+        String selection = "username = ?";
+        // Define the selection arguments
+        String[] selectionArgs = { username };
+
+        // Perform the deletion
+        int deletedRows = db.delete("your_table_name", selection, selectionArgs);
+
+        db.close();
+        if (deletedRows > 0) {
+            return true;
+
+        } else {
+            return false;
+        }
+
+        // Close the database connection
+    }
+
 
 
 

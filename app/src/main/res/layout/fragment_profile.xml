@@ -7,11 +7,11 @@
 
     <TextView
         android:layout_width="match_parent"
-        android:layout_height="75dp"
+        android:layout_height="119dp"
         android:background="@drawable/topbar_border"
         android:fontFamily="sans-serif-black"
         android:shadowColor="#AA8E8E"
-        android:text="\nUser Dashboard"
+        android:text="\n\nUser Dashboard"
         android:textAlignment="center"
         android:textColor="#FFFFFF"
         android:textSize="20sp"

@@ -45,6 +45,15 @@
         android:layout_below="@id/list_address"
         android:textColor="@color/black"
         tools:text="Phone" />
+    <TextView
+        android:id="@+id/list_spaceavail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="0dp"
+        android:layout_toEndOf="@+id/list_imageview"
+        android:layout_below="@id/list_phonenumber"
+        android:textColor="@color/black"
+        tools:text="Availability" />
 
 
 </RelativeLayout>

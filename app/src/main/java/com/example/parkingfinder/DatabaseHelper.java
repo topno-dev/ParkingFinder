@@ -131,10 +131,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public List<parking_list> getNearbyParking(double latitude, double longitude){
         List<parking_list> items = new ArrayList<parking_list>();
         SQLiteDatabase db = this.getReadableDatabase();
-//        Log.w("Query","SELECT * from parking WHERE lat BETWEEN "+latitude+" -0.01 AND "+latitude+"+0.01 AND long BETWEEN "+longitude+" -0.01 AND "+longitude+" +0.01;");
-//        Cursor c = db.rawQuery("SELECT * from parking WHERE lat BETWEEN "+latitude+" -0.01 AND "+latitude+"+0.01 AND long BETWEEN "+longitude+" -0.01 AND "+longitude+" +0.01;" ,null);
+        Log.w("Query","SELECT * from parking WHERE lat BETWEEN "+latitude+" -0.01 AND "+latitude+"+0.01 AND long BETWEEN "+longitude+" -0.01 AND "+longitude+" +0.01;");
+        Cursor c = db.rawQuery("SELECT * from parking WHERE lat BETWEEN "+latitude+" -0.01 AND "+latitude+"+0.01 AND long BETWEEN "+longitude+" -0.01 AND "+longitude+" +0.01;" ,null);
 //        Example query because of the default location being USA.
-        Cursor c = db.rawQuery("SELECT * FROM parking WHERE lat BETWEEN 18.5131587397036 - 0.01 AND 18.5131587397036 + 0.01 AND long BETWEEN 73.92643376963856 - 0.01 AND 73.92643376963856 + 0.01;",null);
+//        Cursor c = db.rawQuery("SELECT * FROM parking WHERE lat BETWEEN 18.5131587397036 - 0.01 AND 18.5131587397036 + 0.01 AND long BETWEEN 73.92643376963856 - 0.01 AND 73.92643376963856 + 0.01;",null);
         while (c.moveToNext()){
 //            int result_id = c.getInt(0);
             String category = c.getString(1);
@@ -213,9 +213,28 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put("rate", rate);
 
         long result = db.insert("PaymentHistory", null, values);
-        db.close();
-
-        return result != -1; // Returns true if insertion was successful, false otherwise
+        if (result != -1) {
+            // Update the parking table
+            ContentValues parkingValues = new ContentValues();
+            parkingValues.put("space_avail", "space_avail + 1"); // Increment space_avail by 1
+            String whereClause = "auto_id = ?";
+            String[] whereArgs = {String.valueOf(auto_id)};
+            int updateResult = db.update("parking", parkingValues, whereClause, whereArgs);
+            if (updateResult == 1) {
+                // Successfully updated parking table
+                db.close();
+                return true;
+            } else {
+                // Error updating parking table
+                db.close();
+                return false;
+            }
+        } else {
+            // Error inserting into PaymentHistory table
+            db.close();
+            return false;
+        }
+        // Returns true if insertion was successful, false otherwise
     }
 
 

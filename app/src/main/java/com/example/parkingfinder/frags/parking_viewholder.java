@@ -12,13 +12,14 @@ import com.example.parkingfinder.R;
 public class parking_viewholder extends RecyclerView.ViewHolder {
 
     ImageView imageView;
-    TextView list_category, list_address, list_phonenumber;
+    TextView list_category, list_address, list_phonenumber, list_spaceavail;
     public parking_viewholder(@NonNull View itemView, RecyclerViewInterface recyclerViewInterface) {
         super(itemView);
         imageView = itemView.findViewById(R.id.list_imageview);
         list_category = itemView.findViewById(R.id.list_category);
         list_address =itemView.findViewById(R.id.list_address);
         list_phonenumber =itemView.findViewById(R.id.list_phonenumber);
+        list_spaceavail = itemView.findViewById(R.id.list_spaceavail);
 
         itemView.setOnClickListener(new View.OnClickListener() {
             @Override

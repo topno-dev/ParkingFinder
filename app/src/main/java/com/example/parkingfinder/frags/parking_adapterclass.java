@@ -35,6 +35,7 @@ public class parking_adapterclass extends RecyclerView.Adapter<parking_viewholde
         holder.list_category.setText(items.get(position).getCategory());
         holder.list_address.setText(items.get(position).getAddress());
         holder.list_phonenumber.setText(items.get(position).getPhone());
+        holder.list_spaceavail.setText(items.get(position).getSpace_Avail()+"/50 Filled");
         holder.imageView.setImageResource(items.get(position).getImage());
     }
 

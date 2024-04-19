@@ -111,23 +111,30 @@ public class profile extends Fragment implements RecyclerViewInterface {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.w("Buton Clucked", "Click");
                 EditText vehicle_name;
-                EditText vehicle_number;
+                EditText vehicle_rto_code, vehicle_state_code, vehicle_unique_code;
                 vehicle_name = addCarDialog.findViewById(R.id.addVehicleNameEditText);
-                vehicle_number = addCarDialog.findViewById(R.id.addVehicleNumEditText);
+                vehicle_state_code = addCarDialog.findViewById(R.id.addVehicleStateCode);
+                vehicle_rto_code = addCarDialog.findViewById(R.id.addVehicleRTOCODE);
+                vehicle_unique_code = addCarDialog.findViewById(R.id.addVehicleUniqueCode);
 
                 String vehicleName = vehicle_name.getText().toString();
-                String vehicleNumber = vehicle_number.getText().toString();
-                boolean result = dbHelper.createVehicle(username,vehicleName,vehicleNumber);
-                if (result){
-                    Toast.makeText(requireContext(), "Added Vehicle",Toast.LENGTH_SHORT).show();
+
+                //add all three together
+                if (vehicle_name.getText().toString().isEmpty() | vehicle_state_code.getText().toString().isEmpty() | vehicle_rto_code.getText().toString().isEmpty() | vehicle_unique_code.getText().toString().isEmpty()) {
+                    Toast.makeText(requireContext(), "Please fill in complete info!", Toast.LENGTH_SHORT).show();
+                } else {
+                    String vehicleNumber = vehicle_state_code.getText().toString() + vehicle_rto_code.getText().toString() + vehicle_unique_code.getText().toString();
+                boolean result = dbHelper.createVehicle(username, vehicleName, vehicleNumber);
+                if (result) {
+                    Toast.makeText(requireContext(), "Added Vehicle", Toast.LENGTH_SHORT).show();
                     List<vehicle> items = dbHelper.selectVehiclesByUsername(username);
-                    updateRecyclerView(view,items);
+                    updateRecyclerView(view, items);
                     addCarDialog.dismiss();
                 } else {
-                    Toast.makeText(requireContext(),"Vehicle number already added",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(requireContext(), "Vehicle number already added", Toast.LENGTH_SHORT).show();
                 }
+            }
             }
         });
 

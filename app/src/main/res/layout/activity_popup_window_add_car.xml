@@ -25,18 +25,50 @@
         app:layout_constraintVertical_bias="0.176" />
 
     <EditText
-        android:id="@+id/addVehicleNumEditText"
-        android:layout_width="wrap_content"
+        android:id="@+id/addVehicleStateCode"
+        android:layout_width="50dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
         android:background="@drawable/edit_text_shape"
         android:ems="10"
-        android:hint="Vehicle Number"
+        android:hint="  MH"
         android:inputType="text"
-        app:layout_constraintBottom_toTopOf="@+id/button"
+        android:maxLength="2"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.18"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/addVehicleNameEditText" />
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/addVehicleRTOCODE"
+        android:layout_width="50dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/edit_text_shape"
+        android:ems="10"
+        android:hint="   12"
+        android:inputType="text"
+        android:maxLength="2"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.46"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/addVehicleUniqueCode"
+        android:layout_width="75dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/edit_text_shape"
+        android:ems="10"
+        android:hint=" AA1234"
+        android:inputType="text"
+        android:maxLength="6"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.795"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.502" />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/addCarButton"
@@ -47,7 +79,9 @@
         android:textColor="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.448"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.822" />
+        app:layout_constraintVertical_bias="0.809" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

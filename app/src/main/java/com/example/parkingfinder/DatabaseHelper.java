@@ -263,33 +263,26 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public List<vehicle> selectVehiclesByUsername(String username) {
         List<vehicle> vehicles = new ArrayList<vehicle>();
 
-        // Get readable database
         SQLiteDatabase db = this.getReadableDatabase();
-
-        // Define the columns you want to retrieve
+        
         String[] projection = {
                 "vehicle_name",
                 "vehicle_number"
         };
 
-        // Define the selection criteria
         String selection = "username = ?";
         String[] selectionArgs = { username };
 
-        // Query the database
         Cursor cursor = db.query("Vehicle", projection, selection, selectionArgs, null, null, null);
 
-        // Parse the result set and populate the list of vehicles
         while (cursor.moveToNext()) {
             String vehicleName = cursor.getString(cursor.getColumnIndexOrThrow("vehicle_name"));
             String vehicleNumber = cursor.getString(cursor.getColumnIndexOrThrow("vehicle_number"));
 
-            // Create a Vehicle object and add it to the list
             vehicle vehicle = new vehicle(vehicleName, vehicleNumber, R.drawable.baseline_directions_car_24);
             vehicles.add(vehicle);
         }
 
-        // Close the cursor and database connection
         cursor.close();
         db.close();
 

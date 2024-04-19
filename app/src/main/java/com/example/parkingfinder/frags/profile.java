@@ -3,7 +3,9 @@ package com.example.parkingfinder.frags;
 import static android.content.Context.MODE_PRIVATE;
 
 import android.app.Dialog;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -30,6 +32,8 @@ import java.util.List;
 public class profile extends Fragment implements RecyclerViewInterface,vehicleInterface {
 
     DatabaseHelper dbHelper;
+    List<vehicle> items;
+    List<parking_list> pitems;
 
     Dialog addCarDialog;
 
@@ -57,7 +61,7 @@ public class profile extends Fragment implements RecyclerViewInterface,vehicleIn
 
         if (username != null) {
             dbHelper = new DatabaseHelper(requireContext(), null, null, 1);
-            List<vehicle> items = dbHelper.selectVehiclesByUsername(username);
+            items = dbHelper.selectVehiclesByUsername(username);
             if (!items.isEmpty()){
                 updateRecyclerView(view, items);
             } else {
@@ -70,9 +74,9 @@ public class profile extends Fragment implements RecyclerViewInterface,vehicleIn
         // For parking history
         if (username != null) {
             dbHelper = new DatabaseHelper(requireContext(), null, null, 1);
-            List<parking_list> items = dbHelper.getParkingHistory(username);
+            pitems = dbHelper.getParkingHistory(username);
             if (!items.isEmpty()){
-                updateRecyclerViewHistory(view, items);
+                updateRecyclerViewHistory(view, pitems);
             }
 
         }
@@ -143,7 +147,14 @@ public class profile extends Fragment implements RecyclerViewInterface,vehicleIn
 
     @Override
     public void onItemClick(int position) {
-        Toast.makeText(requireContext(),"Parking Info",Toast.LENGTH_SHORT).show();
+        double lati = pitems.get(position).getLatitude();
+        double longi = pitems.get(position).getLongitude();
+        String location = String.valueOf(lati) + "," + String.valueOf(longi);
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.setData(Uri.parse("google.navigation:q=" + location + "&mode=d"));
+        intent.setPackage("com.google.android.apps.maps");
+        startActivity(intent);
+        Toast.makeText(requireContext(),"Navigate to lot",Toast.LENGTH_SHORT).show();
     }
 
     @Override

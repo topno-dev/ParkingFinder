@@ -169,23 +169,28 @@ public class home extends Fragment implements RecyclerViewInterface, vehicleInte
                     etime = endTime.getText().toString();
                     stime = startTime.getText().toString();
 
-                    if (datetime.length()<2 | etime.length()<2 | stime.length()<2){
-                        Toast.makeText(getContext(),"Please select date, start time and end time properly",Toast.LENGTH_SHORT).show();
-                    } else {
+                    if (etime.compareTo(stime)>0) {
+
+                        if (datetime.length() < 2 | etime.length() < 2 | stime.length() < 2) {
+                            Toast.makeText(getContext(), "Please select date, start time and end time properly", Toast.LENGTH_SHORT).show();
+                        } else {
 
 
-                        boolean success = dbHelper.createPaymentHistory(username, "2", res.get(position).getAuto_id(), stime, etime, datetime);
-                        if (success){
-                            Log.w("Added to DB","DB");
-                            double lati = res.get(position).getLatitude();
-                            double longi = res.get(position).getLongitude();
-                            String location = String.valueOf(lati)+","+String.valueOf(longi);
-                            Intent intent = new Intent(Intent.ACTION_VIEW);
-                            intent.setData(Uri.parse("google.navigation:q="+location+"&mode=d"));
-                            intent.setPackage("com.google.android.apps.maps");
-                            startActivity(intent);
-                            bookSlot.dismiss();
+                            boolean success = dbHelper.createPaymentHistory(username, "2", res.get(position).getAuto_id(), stime, etime, datetime);
+                            if (success) {
+                                Log.w("Added to DB", "DB");
+                                double lati = res.get(position).getLatitude();
+                                double longi = res.get(position).getLongitude();
+                                String location = String.valueOf(lati) + "," + String.valueOf(longi);
+                                Intent intent = new Intent(Intent.ACTION_VIEW);
+                                intent.setData(Uri.parse("google.navigation:q=" + location + "&mode=d"));
+                                intent.setPackage("com.google.android.apps.maps");
+                                startActivity(intent);
+                                bookSlot.dismiss();
+                            }
                         }
+                    } else {
+                        Toast.makeText(getContext(), "End time is before start time", Toast.LENGTH_SHORT).show();
                     }
 
                 } catch (Exception e) {
@@ -216,6 +221,7 @@ public class home extends Fragment implements RecyclerViewInterface, vehicleInte
                 date.setText(String.valueOf(year)+"."+String.valueOf(month)+"."+String.valueOf(dayOfMonth));
             }
         },2024,3,15);
+        dialog.getDatePicker().setMinDate(System.currentTimeMillis() - 1000);
         dialog.show();
     }
 
@@ -223,7 +229,7 @@ public class home extends Fragment implements RecyclerViewInterface, vehicleInte
         TimePickerDialog dialog = new TimePickerDialog(context, new TimePickerDialog.OnTimeSetListener() {
             @Override
             public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                textView.setText(String.valueOf(hourOfDay)+"."+String.valueOf(minute));
+                textView.setText(String.valueOf(hourOfDay)+"Hrs "+String.valueOf(minute) +"Mins");
             }
         },15,00,true);
         dialog.show();

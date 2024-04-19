@@ -42,26 +42,6 @@ public class admin extends AppCompatActivity {
             }
         });
 
-        EditText usernameEditText;
-        usernameEditText = findViewById(R.id.editTextText4);
-
-        Button delUser;
-        delUser = findViewById(R.id.button5);
-
-        delUser.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dbHelper.loadHandler();
-                String username = usernameEditText.getText().toString();
-                boolean checker = dbHelper.deleteUser(username);
-                if (checker) {
-                    Toast.makeText(getApplicationContext(), "Deleted user :" + username, Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(getApplicationContext(), "User :" + username + " doesn't exist", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
-
 
     }
 }

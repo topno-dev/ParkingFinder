@@ -29,6 +29,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.TextView;
@@ -38,6 +41,7 @@ import android.widget.Toast;
 import com.example.parkingfinder.DatabaseHelper;
 import com.example.parkingfinder.MainActivity;
 import com.example.parkingfinder.R;
+import com.example.parkingfinder.SharedPreferencesManager;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 
@@ -53,12 +57,16 @@ public class home extends Fragment implements RecyclerViewInterface, vehicleInte
     private FusedLocationProviderClient fusedLocationClient;
     private DatabaseHelper dbHelper;
     List<parking_list> res;
-    Dialog bookSlot;
+    Dialog bookSlot, payWindow;
     AppCompatButton dateButton;
     AppCompatButton startTimeButton;
-    AppCompatButton endTimeButton, bookButton;
-    TextView date, startTime, endTime;
-    String username;
+    AppCompatButton endTimeButton, bookButton, paymentButton;
+    TextView date, startTime, endTime, paymentTextView;
+    String username, vehicle_name, vehicle_number;
+    AutoCompleteTextView autoCompleteTextView;
+    ArrayAdapter<String> adapterItems;
+    double rate;
+    int start_hour, end_hour;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -80,10 +88,14 @@ public class home extends Fragment implements RecyclerViewInterface, vehicleInte
 
         SharedPreferences sharedPreferences = requireContext().getSharedPreferences("loginPrefs", MODE_PRIVATE);
         username = sharedPreferences.getString("username", null);
-
+        vehicle_name = "None";
+        vehicle_number = "None";
         bookSlot = new Dialog(requireContext());
+        payWindow = new Dialog(requireContext());
 
         bookSlot.setContentView(R.layout.buyticket);
+        payWindow.setContentView(R.layout.paymentscreen);
+
 
 
         date = bookSlot.findViewById(R.id.dateTextView);
@@ -94,6 +106,29 @@ public class home extends Fragment implements RecyclerViewInterface, vehicleInte
         startTimeButton = bookSlot.findViewById(R.id.startTime);
         endTimeButton = bookSlot.findViewById(R.id.endTime);
         bookButton = bookSlot.findViewById(R.id.bookButton);
+        autoCompleteTextView = bookSlot.findViewById(R.id.autoCompleteTextView);
+
+        paymentButton = payWindow.findViewById(R.id.payButton);
+        paymentTextView = payWindow.findViewById(R.id.paymentValueTextView);
+
+
+        List<vehicle> vehicleList = dbHelper.selectVehiclesByUsername(username);
+        String[] names = new String[vehicleList.size()];
+        for (int i = 0; i < vehicleList.size(); i++) {
+            names[i] = vehicleList.get(i).getName();
+        }
+        adapterItems = new ArrayAdapter<String>(requireContext(), R.layout.dropdown_item, names);
+        autoCompleteTextView.setAdapter(adapterItems);
+        autoCompleteTextView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                String item = parent.getItemAtPosition(position).toString();
+                vehicle_name = item;
+                vehicle_number = vehicleList.get(position).getVeh_num();
+            }
+        });
+
+
 
 
         textView = view.findViewById(R.id.searchSpots);
@@ -149,14 +184,14 @@ public class home extends Fragment implements RecyclerViewInterface, vehicleInte
         startTimeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openTimeDialog(getContext(),startTime);
+                openTimeDialog(getContext(),startTime,0);
             }
         });
 
         endTimeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openTimeDialog(getContext(),endTime);
+                openTimeDialog(getContext(),endTime,1);
             }
         });
 
@@ -169,28 +204,45 @@ public class home extends Fragment implements RecyclerViewInterface, vehicleInte
                     etime = endTime.getText().toString();
                     stime = startTime.getText().toString();
 
-                    if (etime.compareTo(stime)>0) {
-
-                        if (datetime.length() < 2 | etime.length() < 2 | stime.length() < 2) {
-                            Toast.makeText(getContext(), "Please select date, start time and end time properly", Toast.LENGTH_SHORT).show();
-                        } else {
 
 
-                            boolean success = dbHelper.createPaymentHistory(username, "2", res.get(position).getAuto_id(), stime, etime, datetime);
-                            if (success) {
-                                Log.w("Added to DB", "DB");
-                                double lati = res.get(position).getLatitude();
-                                double longi = res.get(position).getLongitude();
-                                String location = String.valueOf(lati) + "," + String.valueOf(longi);
-                                Intent intent = new Intent(Intent.ACTION_VIEW);
-                                intent.setData(Uri.parse("google.navigation:q=" + location + "&mode=d"));
-                                intent.setPackage("com.google.android.apps.maps");
-                                startActivity(intent);
-                                bookSlot.dismiss();
+                    if (!vehicle_number.equals("None")) {
+                        if (etime.compareTo(stime) > 0) {
+
+                            if (datetime.length() < 2 | etime.length() < 2 | stime.length() < 2) {
+                                Toast.makeText(getContext(), "Please select date, start time and end time properly", Toast.LENGTH_SHORT).show();
+                            } else {
+                                rate = dbHelper.getRate();
+                                paymentTextView.setText(String.valueOf((end_hour-start_hour)*rate));
+                                paymentButton.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        boolean success = dbHelper.createPaymentHistory(username, vehicle_number, res.get(position).getAuto_id(), stime, etime, datetime);
+                                        if (success) {
+                                            Log.w("Added to DB", "DB");
+                                            double lati = res.get(position).getLatitude();
+                                            double longi = res.get(position).getLongitude();
+                                            String location = String.valueOf(lati) + "," + String.valueOf(longi);
+                                            Intent intent = new Intent(Intent.ACTION_VIEW);
+                                            intent.setData(Uri.parse("google.navigation:q=" + location + "&mode=d"));
+                                            intent.setPackage("com.google.android.apps.maps");
+                                            startActivity(intent);
+                                            bookSlot.dismiss();
+                                        }
+                                        payWindow.dismiss();
+                                    }
+                                });
+                                payWindow.setCancelable(false);
+                                payWindow.show();
+
+
                             }
+                        } else {
+                            Toast.makeText(getContext(), "End time is before start time", Toast.LENGTH_SHORT).show();
                         }
+
                     } else {
-                        Toast.makeText(getContext(), "End time is before start time", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(),"Please add vehicle / Select Vehicle", Toast.LENGTH_SHORT).show();
                     }
 
                 } catch (Exception e) {
@@ -201,17 +253,6 @@ public class home extends Fragment implements RecyclerViewInterface, vehicleInte
 
         bookSlot.show();
 
-
-
-
-
-//        double lati = res.get(position).getLatitude();
-//        double longi = res.get(position).getLongitude();
-//        String location = String.valueOf(lati)+","+String.valueOf(longi);
-//        Intent intent = new Intent(Intent.ACTION_VIEW);
-//        intent.setData(Uri.parse("google.navigation:q="+location+"&mode=d"));
-//        intent.setPackage("com.google.android.apps.maps");
-//        startActivity(intent);
     }
 
     private void openDateDialog(Context context){
@@ -225,11 +266,20 @@ public class home extends Fragment implements RecyclerViewInterface, vehicleInte
         dialog.show();
     }
 
-    private void openTimeDialog(Context context, TextView textView){
+    private void openTimeDialog(Context context, TextView textView, int typeOfDate){
         TimePickerDialog dialog = new TimePickerDialog(context, new TimePickerDialog.OnTimeSetListener() {
             @Override
             public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                textView.setText(String.valueOf(hourOfDay)+"Hrs "+String.valueOf(minute) +"Mins");
+                if (hourOfDay>9) {
+                    textView.setText(String.valueOf(hourOfDay) + "Hrs " + String.valueOf(minute) + "Mins");
+                } else {
+                    textView.setText("0"+String.valueOf(hourOfDay) + "Hrs " + String.valueOf(minute) + "Mins");
+                }
+                if (typeOfDate == 0) {
+                    start_hour = hourOfDay;
+                } else {
+                    end_hour = hourOfDay;
+                }
             }
         },15,00,true);
         dialog.show();

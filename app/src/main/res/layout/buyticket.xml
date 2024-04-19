@@ -13,10 +13,10 @@
         android:hint="Select Date"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.139"
+        app:layout_constraintHorizontal_bias="0.154"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.205" />
+        app:layout_constraintVertical_bias="0.111" />
 
     <TextView
         android:id="@+id/startTimeTextView"
@@ -26,20 +26,20 @@
         android:hint="Select Start Time"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.161"
+        app:layout_constraintHorizontal_bias="0.177"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/dateTextView"
-        app:layout_constraintVertical_bias="0.307" />
+        app:layout_constraintVertical_bias="0.257" />
 
     <TextView
         android:id="@+id/endTimeTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="144dp"
+        android:layout_marginBottom="172dp"
         android:hint="Select End Time"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.156"
+        app:layout_constraintHorizontal_bias="0.172"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView11"
         app:layout_constraintVertical_bias="0.262" />
@@ -58,7 +58,7 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/dateTextView"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.185" />
+        app:layout_constraintVertical_bias="0.086" />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/startTime"
@@ -73,7 +73,7 @@
         app:layout_constraintHorizontal_bias="0.565"
         app:layout_constraintStart_toEndOf="@+id/textView11"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.384" />
+        app:layout_constraintVertical_bias="0.284" />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/endTime"
@@ -84,10 +84,10 @@
         android:textColor="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.77"
+        app:layout_constraintHorizontal_bias="0.774"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.572" />
+        app:layout_constraintVertical_bias="0.486" />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/bookButton"
@@ -101,5 +101,26 @@
         app:layout_constraintHorizontal_bias="0.465"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.884" />
+        app:layout_constraintVertical_bias="0.947" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="@+id/bookButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/endTime"
+        app:layout_constraintVertical_bias="0.451">
+
+        <AutoCompleteTextView
+            android:id="@+id/autoCompleteTextView"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="No Vehicle Selected"
+            android:inputType="none"
+            />
+
+    </com.google.android.material.textfield.TextInputLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

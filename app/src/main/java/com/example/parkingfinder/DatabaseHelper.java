@@ -168,6 +168,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return result != -1; // Returns true if insertion was successful, false otherwise
     }
 
+
+    public double getRate(){
+        SharedPreferencesManager sharedPreferencesManager = SharedPreferencesManager.getInstance(mContext);
+        return sharedPreferencesManager.getParkingRate();
+    }
     public boolean verifyUser(String username, String password) {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.query("User",

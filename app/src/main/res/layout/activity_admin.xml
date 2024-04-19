@@ -46,29 +46,4 @@
         android:layout_toRightOf="@id/editTextNewRate"
         />
 
-    <Button
-        android:id="@+id/button5"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Delete User"
-        android:layout_marginStart="44dp"
-        android:layout_toRightOf="@id/editTextText4"
-        android:layout_marginTop="57dp"
-        android:layout_below="@id/editTextNewRate"
-         />
-
-    <EditText
-        android:id="@+id/editTextText4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="57dp"
-        android:layout_marginLeft="30dp"
-        android:layout_marginBottom="567dp"
-        android:ems="10"
-        android:hint="Enter Username"
-        android:inputType="text"
-
-        android:layout_below="@id/editTextNewRate"
-         />
-
 </RelativeLayout>

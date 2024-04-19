@@ -46,9 +46,9 @@ import org.w3c.dom.Text;
 import java.util.ArrayList;
 import java.util.List;
 
-public class home extends Fragment implements RecyclerViewInterface{
+public class home extends Fragment implements RecyclerViewInterface, vehicleInterface{
 
-    TextView textView;
+    AppCompatButton textView;
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 123;
     private FusedLocationProviderClient fusedLocationClient;
     private DatabaseHelper dbHelper;
@@ -173,6 +173,7 @@ public class home extends Fragment implements RecyclerViewInterface{
                         Toast.makeText(getContext(),"Please select date, start time and end time properly",Toast.LENGTH_SHORT).show();
                     } else {
 
+
                         boolean success = dbHelper.createPaymentHistory(username, "2", res.get(position).getAuto_id(), stime, etime, datetime);
                         if (success){
                             Log.w("Added to DB","DB");
@@ -229,6 +230,8 @@ public class home extends Fragment implements RecyclerViewInterface{
     }
 
 
+    @Override
+    public void onVehicleClick(String vehicleNumber) {
 
-
+    }
 }

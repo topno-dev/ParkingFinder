@@ -214,21 +214,20 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         long result = db.insert("PaymentHistory", null, values);
         if (result != -1) {
-            // Update the parking table
             ContentValues parkingValues = new ContentValues();
             parkingValues.put("space_avail", "space_avail + 1"); // Increment space_avail by 1
-            String whereClause = "auto_id = ?";
             String[] whereArgs = {String.valueOf(auto_id)};
-            int updateResult = db.update("parking", parkingValues, whereClause, whereArgs);
-            if (updateResult == 1) {
-                // Successfully updated parking table
-                db.close();
-                return true;
-            } else {
-                // Error updating parking table
-                db.close();
-                return false;
-            }
+            Cursor c = db.rawQuery("UPDATE parking SET space_avail = space_avail + 1 WHERE auto_id = ?", whereArgs);
+            c.close();
+            db.close();
+            return true;
+//            if (updateResult == 1) {
+//                // Successfully updated parking table
+//                return true;
+//            } else {
+//                // Error updating parking table
+//                return false;
+//            }
         } else {
             // Error inserting into PaymentHistory table
             db.close();

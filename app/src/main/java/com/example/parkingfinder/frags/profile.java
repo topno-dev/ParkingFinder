@@ -27,7 +27,7 @@ import com.example.parkingfinder.R;
 import java.util.ArrayList;
 import java.util.List;
 
-public class profile extends Fragment implements RecyclerViewInterface {
+public class profile extends Fragment implements RecyclerViewInterface,vehicleInterface {
 
     DatabaseHelper dbHelper;
 
@@ -93,7 +93,7 @@ public class profile extends Fragment implements RecyclerViewInterface {
 
         RecyclerView recyclerView = view.findViewById(R.id.recyclerView3);
         recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext(),LinearLayoutManager.HORIZONTAL,false));
-        recyclerView.setAdapter(new vehicle_adapterclass(getContext(),items));
+        recyclerView.setAdapter(new vehicle_adapterclass(getContext(),items,this));
     }
 
     private void updateRecyclerViewHistory(View view, List<parking_list>items){
@@ -144,5 +144,10 @@ public class profile extends Fragment implements RecyclerViewInterface {
     @Override
     public void onItemClick(int position) {
         Toast.makeText(requireContext(),"Parking Info",Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onVehicleClick(String vehicleNumber) {
+        Toast.makeText(requireContext(), vehicleNumber,Toast.LENGTH_SHORT).show();
     }
 }

@@ -62,3 +62,11 @@ Technologies Used
     Android Studio
 
     XML
+
+
+# UI
+![image](https://github.com/user-attachments/assets/9a36d00d-e751-4b64-ab9c-35ed078a8971)
+
+![image](https://github.com/user-attachments/assets/565bf8c5-a00b-44f2-b182-585ce940e494)
+
+
